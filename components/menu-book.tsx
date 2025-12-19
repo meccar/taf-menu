@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
-import { useRef, useEffect, useState } from 'react'
-import HTMLFlipBook from 'react-pageflip'
+import { useRef, useEffect, useState } from "react";
+import { View } from "react-native";
+import HTMLFlipBook from "react-pageflip";
 
 export function MenuBook({
   pages,
@@ -9,45 +10,49 @@ export function MenuBook({
   onNextPage,
   onPrevPage,
 }: {
-  pages: React.ReactNode[]
-  activeIndex: number
-  onNextPage?: () => void
-  onPrevPage?: () => void
+  pages: React.ReactNode[];
+  activeIndex: number;
+  onNextPage?: () => void;
+  onPrevPage?: () => void;
 }) {
-  const flipBookRef = useRef<any>(null)
-  const [isInternalFlip, setIsInternalFlip] = useState(false)
+  const flipBookRef = useRef<any>(null);
+  const [isInternalFlip, setIsInternalFlip] = useState(false);
 
-  // Sync activeIndex with flipbook page (only when changed externally, e.g., from tabs)
   useEffect(() => {
     if (flipBookRef.current && !isInternalFlip) {
       try {
-        const pageFlipInstance = flipBookRef.current.pageFlip()
+        const pageFlipInstance = flipBookRef.current.pageFlip();
         if (pageFlipInstance) {
-          const currentPage = pageFlipInstance.getCurrentPageIndex()
-          if (currentPage !== activeIndex)
-            pageFlipInstance.flip(activeIndex)
+          const currentPage = pageFlipInstance.getCurrentPageIndex();
+          if (currentPage !== activeIndex) pageFlipInstance.flip(activeIndex);
         }
       } catch (error) {
-        console.debug('PageFlip not ready:', error)
+        console.debug("PageFlip not ready:", error);
       }
     }
-    setIsInternalFlip(false)
-  }, [activeIndex, isInternalFlip])
+    setIsInternalFlip(false);
+  }, [activeIndex, isInternalFlip]);
 
   const handleFlip = (e: any) => {
-    const newPage = e.data
+    const newPage = e.data;
     if (newPage !== activeIndex) {
-      setIsInternalFlip(true)
+      setIsInternalFlip(true);
       if (newPage > activeIndex) {
-        onNextPage?.()
+        onNextPage?.();
       } else {
-        onPrevPage?.()
+        onPrevPage?.();
       }
     }
-  }
+  };
 
   return (
-    <div className="relative h-[95%] w-full">
+    <View
+      style={{
+        position: "relative",
+        height: "95%",
+        width: "100%",
+      }}
+    >
       <HTMLFlipBook
         ref={flipBookRef}
         width={400}
@@ -74,25 +79,25 @@ export function MenuBook({
         disableFlipByClick={false}
         className="w-full h-full"
         style={{
-          height: '100%',
+          height: "100%",
         }}
       >
         {pages.map((page, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="page bg-background rounded-xl"
             style={{
-              padding: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              height: '100%',
-              width: '100%',
+              padding: "16px",
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              width: "100%",
             }}
           >
             {page}
           </div>
         ))}
       </HTMLFlipBook>
-    </div>
-  )
+    </View>
+  );
 }

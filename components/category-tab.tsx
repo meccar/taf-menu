@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import * as Tabs from '@radix-ui/react-tabs'
+import * as Tabs from "@radix-ui/react-tabs";
 
 export function CategoryTab({
   value,
   label,
 }: {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }) {
   return (
     <Tabs.Trigger
@@ -18,5 +18,5 @@ export function CategoryTab({
     >
       {label}
     </Tabs.Trigger>
-  )
+  );
 }

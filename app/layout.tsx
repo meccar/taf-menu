@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { ReduxProvider } from "./redux-provider";
 import { Providers } from "./providers";
-import { View } from 'react-native'
+import { View } from "react-native";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -32,8 +32,9 @@ export default function RootLayout({
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          // defaultTheme="system"
+          defaultTheme="light"
+          // enableSystem
           disableTransitionOnChange
         >
           <ReduxProvider>
@@ -41,12 +42,12 @@ export default function RootLayout({
               <View
                 style={{
                   flex: 1,
-                  height: '100%',
-                  width: '100%',
+                  height: "100%",
+                  width: "100%",
                   paddingHorizontal: 12,
-                  backgroundColor: 'hsl(var(--background))',
-                  alignItems: 'center',
-                  gap: 24
+                  backgroundColor: "hsl(var(--background))",
+                  alignItems: "center",
+                  gap: 24,
                 }}
               >
                 {children}
