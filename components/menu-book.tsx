@@ -1,37 +1,98 @@
 'use client'
 
-import clsx from 'clsx'
+import { useRef, useEffect, useState } from 'react'
+import HTMLFlipBook from 'react-pageflip'
 
 export function MenuBook({
   pages,
   activeIndex,
+  onNextPage,
+  onPrevPage,
 }: {
   pages: React.ReactNode[]
   activeIndex: number
+  onNextPage?: () => void
+  onPrevPage?: () => void
 }) {
-  return (
-    <div className="relative h-full perspective-[1600px]">
-      {pages.map((page, index) => {
-        const isActive = index === activeIndex
-        const isBefore = index < activeIndex
+  const flipBookRef = useRef<any>(null)
+  const [isInternalFlip, setIsInternalFlip] = useState(false)
 
-        return (
-          <div
-            key={index}
-            className={clsx(
-              'absolute inset-0 bg-background rounded-xl shadow-lg transition-transform duration-700 ease-in-out origin-left',
-              isActive && 'z-20',
-              isBefore && 'rotate-y-[-180deg] z-10',
-              !isActive && !isBefore && 'rotate-y-0 z-0'
-            )}
+  // Sync activeIndex with flipbook page (only when changed externally, e.g., from tabs)
+  useEffect(() => {
+    if (flipBookRef.current && !isInternalFlip) {
+      try {
+        const pageFlipInstance = flipBookRef.current.pageFlip()
+        if (pageFlipInstance) {
+          const currentPage = pageFlipInstance.getCurrentPageIndex()
+          if (currentPage !== activeIndex)
+            pageFlipInstance.flip(activeIndex)
+        }
+      } catch (error) {
+        console.debug('PageFlip not ready:', error)
+      }
+    }
+    setIsInternalFlip(false)
+  }, [activeIndex, isInternalFlip])
+
+  const handleFlip = (e: any) => {
+    const newPage = e.data
+    if (newPage !== activeIndex) {
+      setIsInternalFlip(true)
+      if (newPage > activeIndex) {
+        onNextPage?.()
+      } else {
+        onPrevPage?.()
+      }
+    }
+  }
+
+  return (
+    <div className="relative h-[95%] w-full">
+      <HTMLFlipBook
+        ref={flipBookRef}
+        width={400}
+        height={600}
+        size="stretch"
+        minWidth={300}
+        maxWidth={500}
+        minHeight={400}
+        maxHeight={700}
+        maxShadowOpacity={0.5}
+        showCover={false}
+        mobileScrollSupport={true}
+        onFlip={handleFlip}
+        startPage={activeIndex}
+        drawShadow={true}
+        flippingTime={700}
+        usePortrait={true}
+        startZIndex={0}
+        autoSize={true}
+        clickEventForward={true}
+        useMouseEvents={true}
+        swipeDistance={30}
+        showPageCorners={false}
+        disableFlipByClick={false}
+        className="w-full h-full"
+        style={{
+          height: '100%',
+        }}
+      >
+        {pages.map((page, index) => (
+          <div 
+            key={index} 
+            className="page bg-background rounded-xl"
             style={{
-              transformStyle: 'preserve-3d',
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%',
+              width: '100%',
             }}
           >
             {page}
           </div>
-        )
-      })}
+        ))}
+      </HTMLFlipBook>
     </div>
   )
 }

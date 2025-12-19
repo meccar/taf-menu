@@ -15,6 +15,18 @@ const categories = ['ramen', 'rice', 'drinks'] as const
 export function MenuScreen() {
   const [activeIndex, setActiveIndex] = useState(0)
 
+  const handleNextPage = () => {
+    if (activeIndex < categories.length - 1) {
+      setActiveIndex(activeIndex + 1)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1)
+    }
+  }
+
   return (
     <View
       style={{
@@ -41,9 +53,11 @@ export function MenuScreen() {
       </Tabs.Root>
 
       <div className="relative mx-auto w-full max-w-[420px] h-[75vh]">
-        <div className="absolute inset-0 rounded-2xl bg-[#fdfbf7] shadow-[0_20px_50px_rgba(0,0,0,0.2)]" />
+        <div className="absolute h-[95%] inset-0 rounded-2xl bg-[#fdfbf7] shadow-[0_20px_50px_rgba(0,0,0,0.2)]" />
         <MenuBook
           activeIndex={activeIndex}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
           pages={[
             <MenuPage key="ramen">
               <MenuCard name="Spicy Pork Ramen" description="Rich broth" price={12} />
@@ -59,8 +73,8 @@ export function MenuScreen() {
             </MenuPage>,
           ]}
         />
-        <CartButton />
       </div>
+      <CartButton />
 
     </View>
   )

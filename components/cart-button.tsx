@@ -11,11 +11,11 @@ export function CartButton() {
         <Pressable
           style={{
             position: 'absolute',
-            bottom: 16,
-            left: 16,
-            right: 16,
-            height: 56,
-            borderRadius: 12,
+            bottom: 10,
+            right: 0,
+            height: 50,
+            width: 160,
+            borderRadius: 30,
             backgroundColor: '#f97316',
             flexDirection: 'row',
             alignItems: 'center',

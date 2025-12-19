@@ -88,3 +88,13 @@ body,
     inset 10px 0 20px rgba(0,0,0,0.08),
     0 10px 40px rgba(0,0,0,0.15);
 }
+
+.perspective-1600 {
+  perspective: 1600px;
+  -webkit-perspective: 1600px;
+}
+
+.origin-left {
+  transform-origin: left center;
+  -webkit-transform-origin: left center;
+}
