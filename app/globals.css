@@ -66,3 +66,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.paper {
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.03), transparent 40%),
+    #fffdf8;
+}
+
+.book-shadow {
+  box-shadow:
+    inset 10px 0 20px rgba(0,0,0,0.08),
+    0 10px 40px rgba(0,0,0,0.15);
+}
