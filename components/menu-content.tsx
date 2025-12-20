@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import { MenuBook } from "./menu-book";
 import { MenuPage } from "./menu-page";
 import { MenuCard } from "./menu-card";
@@ -12,29 +13,33 @@ interface MenuContentProps {
   categories: MenuCategory[];
 }
 
-export function MenuContent({
+function MenuContentComponent({
   activeIndex,
   onNextPage,
   onPrevPage,
   categories,
 }: MenuContentProps) {
-  const pages = categories.flatMap((category) =>
-    category.pages.map((page) => (
-      <MenuPage
-        key={`${category.key}-page-${page.pageNumber}`}
-        pageNumber={page.pageNumber}
-      >
-        {page.items.map((item) => (
-          <MenuCard
-            key={item.name}
-            name={item.name}
-            description={item.description}
-            price={item.price}
-            image={item.image}
-          />
-        ))}
-      </MenuPage>
-    ))
+  const pages = useMemo(
+    () =>
+      categories.flatMap((category) =>
+        category.pages.map((page) => (
+          <MenuPage
+            key={`${category.key}-page-${page.pageNumber}`}
+            pageNumber={page.pageNumber}
+          >
+            {page.items.map((item) => (
+              <MenuCard
+                key={item.name}
+                name={item.name}
+                description={item.description}
+                price={item.price}
+                image={item.image}
+              />
+            ))}
+          </MenuPage>
+        ))
+      ),
+    [categories]
   );
 
   return (
@@ -46,3 +51,5 @@ export function MenuContent({
     />
   );
 }
+
+export const MenuContent = memo(MenuContentComponent);

@@ -1,6 +1,6 @@
-import { View } from "react-native";
+import { memo } from "react";
 
-export function MenuPage({
+function MenuPageComponent({
   children,
   pageNumber,
 }: {
@@ -8,41 +8,22 @@ export function MenuPage({
   pageNumber?: number;
 }) {
   return (
-    <View
+    <div
+      className="h-full w-full p-4 flex flex-col"
       style={{
-        flex: 1,
-        padding: 16,
-        position: "relative",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
       }}
     >
-      <div
-        style={{
-          backfaceVisibility: "hidden",
-          WebkitBackfaceVisibility: "hidden",
-          transform: "translateZ(0)",
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <div style={{ flex: 1, overflowY: "auto" }}>{children}</div>
+      <div className="flex-1 overflow-hidden">{children}</div>
 
-        {pageNumber && (
-          <div
-            style={{
-              textAlign: "right",
-              marginTop: 16,
-              paddingTop: 8,
-              borderTop: "1px solid #e5e7eb",
-              fontSize: "0.875rem",
-              color: "#6b7280",
-            }}
-          >
-            {pageNumber}
-          </div>
-        )}
-      </div>
-    </View>
+      {pageNumber && (
+        <div className="mt-4 pt-2 border-t border-gray-200 text-right text-sm text-gray-500">
+          {pageNumber}
+        </div>
+      )}
+    </div>
   );
 }
+
+export const MenuPage = memo(MenuPageComponent);

@@ -78,15 +78,13 @@ body,
 }
 
 .paper {
-  background:
-    linear-gradient(to right, rgba(0,0,0,0.03), transparent 40%),
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.03), transparent 40%),
     #fffdf8;
 }
 
 .book-shadow {
-  box-shadow:
-    inset 10px 0 20px rgba(0,0,0,0.08),
-    0 10px 40px rgba(0,0,0,0.15);
+  box-shadow: inset 10px 0 20px rgba(0, 0, 0, 0.08),
+    0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
 .perspective-1600 {
@@ -97,4 +95,14 @@ body,
 .origin-left {
   transform-origin: left center;
   -webkit-transform-origin: left center;
+}
+
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import * as Tabs from "@radix-ui/react-tabs";
-import { CategoryTab } from "./category-tab";
+import { useMemo } from "react";
 
 interface CategoryTabsProps {
   categories: string[];
@@ -23,20 +22,41 @@ export function CategoryTabList({
     );
   };
 
+  // Ensure activeIndex is within bounds
+  const safeActiveIndex = useMemo(() => {
+    if (activeIndex < 0 || activeIndex >= categories.length) return 0;
+    return activeIndex;
+  }, [activeIndex, categories.length]);
+
+  if (categories.length === 0) return null;
+
+  const handleClick = (index: number) => {
+    if (index >= 0 && index < categories.length) onIndexChange(index);
+  };
+
   return (
-    <Tabs.Root
-      value={categories[activeIndex]}
-      onValueChange={(value) => onIndexChange(categories.indexOf(value))}
-    >
-      <Tabs.List className="flex gap-2 px-4 py-3 overflow-x-auto">
-        {categories.map((category) => (
-          <CategoryTab
+    <div className="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide">
+      {categories.map((category, index) => {
+        const isActive = index === safeActiveIndex;
+        return (
+          <button
             key={category}
-            value={category}
-            label={getLabel(category)}
-          />
-        ))}
-      </Tabs.List>
-    </Tabs.Root>
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleClick(index);
+            }}
+            className={`px-4 py-1 rounded-full border text-sm font-medium transition-colors ${
+              isActive
+                ? "bg-primary text-primary-foreground"
+                : "bg-transparent hover:bg-accent hover:text-accent-foreground"
+            }`}
+          >
+            {getLabel(category)}
+          </button>
+        );
+      })}
+    </div>
   );
 }

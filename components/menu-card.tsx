@@ -1,9 +1,14 @@
 "use client";
 
+import { memo } from "react";
 import { Plus } from "lucide-react";
-import { View, Pressable, Image } from "react-native";
+import Image from "next/image";
+import { View } from "react-native";
+import { Button } from "./ui/button";
+import { useDispatch } from "react-redux";
+import { addItem } from "@/store/cartSlice";
 
-export function MenuCard({
+function MenuCardComponent({
   name,
   description,
   price,
@@ -14,22 +19,27 @@ export function MenuCard({
   price: number;
   image: string;
 }) {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(
+      addItem({
+        id: name,
+        name,
+        price,
+      })
+    );
+  };
+
   return (
-    <View
-      style={{
-        borderWidth: 1,
-        borderRadius: 12,
-        overflow: "hidden",
-        marginBottom: 12,
-      }}
-    >
+    <div className="border rounded-lg overflow-hidden mb-3 group h-full justify-between flex flex-col">
       {/* Image */}
       <Image
-        source={{ uri: image }}
-        style={{
-          width: "100%",
-          height: 150,
-        }}
+        src={image}
+        alt={name}
+        width={500}
+        height={150}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       />
 
       {/* Content */}
@@ -39,29 +49,29 @@ export function MenuCard({
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "flex-end",
+          backgroundColor: "white",
         }}
       >
         {/* Text content */}
-        <div className="flex-1 pr-3">
-          <div className="font-medium">{name}</div>
-          <div className="text-sm text-muted-foreground">{description}</div>
-          <div className="mt-1 font-semibold">${price}</div>
-        </div>
+        <View style={{ flex: 1, paddingRight: 12 }}>
+          <h3 className="font-medium line-clamp-2">{name}</h3>
+          <p className="text-sm text-muted-foreground line-clamp-1">
+            {description}
+          </p>
+          <p className="mt-1 font-semibold">${price}</p>
+        </View>
 
         {/* Action */}
-        <Pressable
-          style={{
-            height: 40,
-            width: 40,
-            borderRadius: 999,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "hsl(var(--primary))",
-          }}
+        <Button
+          size="icon"
+          className="h-10 w-10 rounded-full flex-shrink-0"
+          onClick={handleAddToCart}
         >
-          <Plus className="w-4 h-4 text-primary-foreground" />
-        </Pressable>
+          <Plus className="w-4 h-4" />
+        </Button>
       </View>
-    </View>
+    </div>
   );
 }
+
+export const MenuCard = memo(MenuCardComponent);
