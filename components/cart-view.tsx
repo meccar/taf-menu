@@ -8,11 +8,13 @@ import { Button } from "./ui/button";
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { CartItem } from "@/store/cartSlice";
 import { useI18n } from "@/lib/i18n/context";
+import { useSessionContext } from "@/lib/context/session-context";
 
 export function CartView() {
   const cartItems = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
   const { t } = useI18n();
+  const { isValid } = useSessionContext();
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.qty, 0);
   const totalPrice = cartItems.reduce(
@@ -21,10 +23,18 @@ export function CartView() {
   );
 
   const handleIncreaseQuantity = (item: CartItem) => {
+    if (!isValid) {
+      alert("Please scan the QR code at your table to modify your cart.");
+      return;
+    }
     dispatch(addItem({ id: item.id, name: item.name, price: item.price }));
   };
 
   const handleDecreaseQuantity = (item: CartItem) => {
+    if (!isValid) {
+      alert("Please scan the QR code at your table to modify your cart.");
+      return;
+    }
     if (item.qty > 1) {
       dispatch(updateQuantity({ id: item.id, qty: item.qty - 1 }));
     } else {
@@ -33,11 +43,19 @@ export function CartView() {
   };
 
   const handleRemoveItem = (itemId: string) => {
+    if (!isValid) {
+      alert("Please scan the QR code at your table to modify your cart.");
+      return;
+    }
     dispatch(removeItem(itemId));
   };
 
   const handleOrder = () => {
-    // TODO: Implement order functionality
+    if (!isValid) {
+      alert("Please scan the QR code at your table to place an order.");
+      return;
+    }
+    // TODO: Implement order functionality when payment service is ready
     alert(t.orderPlacedSuccessfully);
   };
 

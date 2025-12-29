@@ -7,6 +7,7 @@ import { View } from "react-native";
 import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import { addItem } from "@/store/cartSlice";
+import { useSessionContext } from "@/lib/context/session-context";
 
 function MenuCardComponent({
   name,
@@ -20,8 +21,14 @@ function MenuCardComponent({
   image: string;
 }) {
   const dispatch = useDispatch();
+  const { isValid } = useSessionContext();
 
   const handleAddToCart = () => {
+    if (!isValid) {
+      alert("Please scan the QR code at your table to add items to your cart.");
+      return;
+    }
+
     dispatch(
       addItem({
         id: name,
